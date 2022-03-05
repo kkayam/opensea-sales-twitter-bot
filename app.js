@@ -34,7 +34,7 @@ function formatAndSendTweet(event) {
     var regex = "/^\p{Extended_Pictographic}+$/ug";
 
 
-    if (!assetName.endsWith(".eth") || !regex.test(assetName.slice(0,-4))) {
+    if (!assetName.endsWith(".eth")) {
         console.log(`${assetName} not ENS domain.`);
         return;
     }
