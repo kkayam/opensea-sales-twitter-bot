@@ -21,7 +21,7 @@ function formatAndSendTweet(event) {
     const formattedEthPrice = formattedUnits * tokenEthPrice;
     const formattedUsdPrice = formattedUnits * tokenUsdPrice;
 
-    const tweetText = `${assetName} bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFT ${openseaLink}`;
+    const tweetText = `${assetName} bought for ${formattedEthPrice}${ethers.constants.EtherSymbol} ($${Number(formattedUsdPrice).toFixed(2)}) #NFT #ENS #EMOJIENS ${openseaLink}`;
 
     console.log(tweetText);
 
@@ -31,11 +31,23 @@ function formatAndSendTweet(event) {
     //     return;
     // }
 
-    // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
-    // const imageUrl = _.get(event, ['asset', 'image_url']);
-    // return tweet.tweetWithImage(tweetText, imageUrl);
+    var regex = "/^\p{Extended_Pictographic}+$/ug";
 
-    return tweet.tweet(tweetText);
+
+    if (!assetName.endsWith(".eth") || !regex.test(assetName.slice(0,-4))) {
+        console.log(`${assetName} not ENS domain.`);
+        return;
+    }
+    if (!regex.test(assetName.slice(0,-4))) {
+        console.log(`${assetName} not only emojis.`);
+        return;
+    }
+
+    // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
+    const imageUrl = _.get(event, ['asset', 'image_url']);
+    return tweet.tweetWithImage(tweetText, imageUrl);
+
+    // return tweet.tweet(tweetText);
 }
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
