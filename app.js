@@ -50,43 +50,41 @@ function formatAndSendTweet(event) {
     // return tweet.tweet(tweetText);
 }
 
-tweet.tweet("Hello world");
-
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
-// setInterval(() => {
-//     const lastSaleTime = cache.get('lastSaleTime', null) || moment().startOf('minute').subtract(59, "seconds").unix();
+setInterval(() => {
+    const lastSaleTime = cache.get('lastSaleTime', null) || moment().startOf('minute').subtract(59, "seconds").unix();
 
-//     console.log(`Last sale (in seconds since Unix epoch): ${cache.get('lastSaleTime', null)}`);
+    console.log(`Last sale (in seconds since Unix epoch): ${cache.get('lastSaleTime', null)}`);
 
-//     axios.get('https://api.opensea.io/api/v1/events', {
-//         headers: {
-//             'X-API-KEY': process.env.X_API_KEY
-//         },
-//         params: {
-//             collection_slug: process.env.OPENSEA_COLLECTION_SLUG,
-//             event_type: 'successful',
-//             occurred_after: lastSaleTime,
-//             only_opensea: 'false'
-//         }
-//     }).then((response) => {
-//         const events = _.get(response, ['data', 'asset_events']);
+    axios.get('https://api.opensea.io/api/v1/events', {
+        headers: {
+            'X-API-KEY': process.env.X_API_KEY
+        },
+        params: {
+            collection_slug: process.env.OPENSEA_COLLECTION_SLUG,
+            event_type: 'successful',
+            occurred_after: lastSaleTime,
+            only_opensea: 'false'
+        }
+    }).then((response) => {
+        const events = _.get(response, ['data', 'asset_events']);
 
-//         const sortedEvents = _.sortBy(events, function(event) {
-//             const created = _.get(event, 'created_date');
+        const sortedEvents = _.sortBy(events, function(event) {
+            const created = _.get(event, 'created_date');
 
-//             return new Date(created);
-//         })
+            return new Date(created);
+        })
 
-//         console.log(`${events.length} sales since the last one...`);
+        console.log(`${events.length} sales since the last one...`);
 
-//         _.each(sortedEvents, (event) => {
-//             const created = _.get(event, 'created_date');
+        _.each(sortedEvents, (event) => {
+            const created = _.get(event, 'created_date');
 
-//             cache.set('lastSaleTime', moment(created).unix());
+            cache.set('lastSaleTime', moment(created).unix());
 
-//             return formatAndSendTweet(event);
-//         });
-//     }).catch((error) => {
-//         console.error(error);
-//     });
-// }, 60000);
+            return formatAndSendTweet(event);
+        });
+    }).catch((error) => {
+        console.error(error);
+    });
+}, 600000);
