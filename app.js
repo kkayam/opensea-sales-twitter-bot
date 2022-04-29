@@ -50,11 +50,13 @@ function formatAndSendTweet(event) {
     console.log(`${assetName} not ENS domain.`);
     return;
   }
-  console.log(assetName.slice(0, assetName.indexOf(".eth")));
-  if (!regex.test(assetName.slice(0, -4))) {
+
+  if (!regex.test(assetName.slice(0, assetName.indexOf(".eth")))) {
     console.log(`${assetName} not only emojis.`);
     return;
   }
+
+  console.log(`Posting ${assetName}!`);
 
   // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
   const imageUrl = _.get(event, ["asset", "image_url"]);
