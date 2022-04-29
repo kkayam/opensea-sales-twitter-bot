@@ -43,7 +43,7 @@ function formatAndSendTweet(event) {
   //     return;
   // }
 
-  var regex = "/^p{Extended_Pictographic}+$/ug";
+  var regex = /^p{Extended_Pictographic}+$/gu;
 
   if (!assetName.endsWith(".eth")) {
     console.log(`${assetName} not ENS domain.`);
