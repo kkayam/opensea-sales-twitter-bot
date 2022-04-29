@@ -33,7 +33,7 @@ function formatAndSendTweet(event) {
     ethers.constants.EtherSymbol
   } ($${Number(formattedUsdPrice).toFixed(
     2
-  )}) #NFT #ENS #EMOJIENS ${openseaLink}`;
+  )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
 
   //   console.log(tweetText);
 
