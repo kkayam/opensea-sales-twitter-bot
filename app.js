@@ -50,6 +50,7 @@ function formatAndSendTweet(event) {
     console.log(`${assetName} not ENS domain.`);
     return;
   }
+  console.log(assetName.slice(0, assetName.indexOf(".eth")));
   if (!regex.test(assetName.slice(0, -4))) {
     console.log(`${assetName} not only emojis.`);
     return;
