@@ -47,12 +47,12 @@ function formatAndSendTweet(event) {
     /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gm;
 
   if (!assetName.includes(".eth")) {
-    console.log(`${assetName} not ENS domain.`);
+    // console.log(`${assetName} not ENS domain.`);
     return;
   }
 
   if (!regex.test(assetName.slice(0, assetName.indexOf(".eth")))) {
-    console.log(`${assetName} not only emojis.`);
+    // console.log(`${assetName} not only emojis.`);
     return;
   }
 
@@ -72,12 +72,12 @@ setInterval(() => {
     cache.get("lastSaleTime", null) ||
     moment().startOf("minute").subtract(59, "seconds").unix();
 
-  console.log(
-    `Last sale (in seconds since Unix epoch): ${cache.get(
-      "lastSaleTime",
-      null
-    )}`
-  );
+  //   console.log(
+  //     `Last sale (in seconds since Unix epoch): ${cache.get(
+  //       "lastSaleTime",
+  //       null
+  //     )}`
+  //   );
 
   axios
     .get("https://api.opensea.io/api/v1/events", {
@@ -100,7 +100,12 @@ setInterval(() => {
         return new Date(created);
       });
 
-      console.log(`${events.length} sales since the last one...`);
+      console.log(
+        `Sales since ${cache.get("lastSaleTime", null)}: ${_.get(events, [
+          "asset",
+          "name",
+        ])}`
+      );
 
       _.each(sortedEvents, (event) => {
         const created = _.get(event, "created_date");
