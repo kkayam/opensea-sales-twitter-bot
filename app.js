@@ -68,6 +68,7 @@ function formatAndSendTweet(event) {
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
 setInterval(() => {
+  var d = new Date(0);
   const lastSaleTime =
     cache.get("lastSaleTime", null) ||
     moment().startOf("minute").subtract(59, "seconds").unix();
@@ -99,14 +100,11 @@ setInterval(() => {
 
         return new Date(created);
       });
+      d.setUTCSeconds(cache.get("lastSaleTime", null));
 
       console.log(
-        `Sales since ${cache.get("lastSaleTime", null)}: ${_.map(
-          sortedEvents,
-          "asset.name"
-        )}`
+        `Sales since ${d.toTimeString()}: ${_.map(sortedEvents, "asset.name")}`
       );
-      console.log(events);
 
       _.each(sortedEvents, (event) => {
         const created = _.get(event, "created_date");
