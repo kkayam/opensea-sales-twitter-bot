@@ -57,11 +57,10 @@ function formatAndSendTweet(event) {
   console.log(`Posting ${assetName}!`);
 
   // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
-  //   const imageUrl = _.get(event, ["asset", "image_url"]);
-  //   images from opensea are SVG
-  //   return tweet.tweetWithImage(tweetText, imageUrl);
+  const imageUrl = _.get(event, ["asset", "image_preview_url"]);
+  return tweet.tweetWithImage(tweetText, imageUrl);
 
-  return tweet.tweet(tweetText);
+  // return tweet.tweet(tweetText);
 }
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
@@ -96,7 +95,9 @@ setInterval(() => {
       console.log(
         `Sales since ${d.toTimeString()}: ${_.map(sortedEvents, "asset.name")}`
       );
-      console.log(events);
+      if (process.env.verbose == "true") {
+        console.log(events);
+      }
 
       _.each(sortedEvents, (event) => {
         const created = _.get(event, "created_date");
