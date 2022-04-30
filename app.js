@@ -96,6 +96,7 @@ setInterval(() => {
       console.log(
         `Sales since ${d.toTimeString()}: ${_.map(sortedEvents, "asset.name")}`
       );
+      console.log(events);
 
       _.each(sortedEvents, (event) => {
         const created = _.get(event, "created_date");
