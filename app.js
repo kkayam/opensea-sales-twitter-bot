@@ -35,8 +35,6 @@ function formatAndSendTweet(event) {
     2
   )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
 
-  //   console.log(tweetText);
-
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
   // if (Number(formattedEthPrice) < 1) {
   //     console.log(`${assetName} sold below tweet price (${formattedEthPrice} ETH).`);
@@ -59,8 +57,8 @@ function formatAndSendTweet(event) {
   console.log(`Posting ${assetName}!`);
 
   // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
-  const imageUrl = _.get(event, ["asset", "image_url"]);
-  //   console.log(imageUrl);
+  //   const imageUrl = _.get(event, ["asset", "image_url"]);
+  //   images from opensea are SVG
   //   return tweet.tweetWithImage(tweetText, imageUrl);
 
   return tweet.tweet(tweetText);
@@ -72,13 +70,6 @@ setInterval(() => {
   const lastSaleTime =
     cache.get("lastSaleTime", null) ||
     moment().startOf("minute").subtract(59, "seconds").unix();
-
-  //   console.log(
-  //     `Last sale (in seconds since Unix epoch): ${cache.get(
-  //       "lastSaleTime",
-  //       null
-  //     )}`
-  //   );
 
   axios
     .get("https://api.opensea.io/api/v1/events", {
