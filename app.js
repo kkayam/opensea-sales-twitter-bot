@@ -101,10 +101,10 @@ setInterval(() => {
       });
 
       console.log(
-        `Sales since ${cache.get("lastSaleTime", null)}: ${_.map(sortedEvents, [
-          "asset",
-          "name",
-        ])}`
+        `Sales since ${cache.get("lastSaleTime", null)}: ${_.map(
+          sortedEvents,
+          "asset.name"
+        )}`
       );
       console.log(events);
 
