@@ -78,7 +78,6 @@ setInterval(() => {
   //       null
   //     )}`
   //   );
-  console.log(".");
 
   axios
     .get("https://api.opensea.io/api/v1/events", {
@@ -102,12 +101,12 @@ setInterval(() => {
       });
 
       console.log(
-        `Sales since ${cache.get("lastSaleTime", null)}: ${_.get(
-          sortedEvents,
-          "asset.name"
-        )}`
+        `Sales since ${cache.get("lastSaleTime", null)}: ${_.map(sortedEvents, [
+          "asset",
+          "name",
+        ])}`
       );
-      console.log(sortedEvents);
+      console.log(events);
 
       _.each(sortedEvents, (event) => {
         const created = _.get(event, "created_date");
