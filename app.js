@@ -106,6 +106,7 @@ setInterval(() => {
           "name",
         ])}`
       );
+      console.log(events);
 
       _.each(sortedEvents, (event) => {
         const created = _.get(event, "created_date");
