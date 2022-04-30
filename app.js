@@ -60,7 +60,7 @@ function formatAndSendTweet(event) {
 
   // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
   const imageUrl = _.get(event, ["asset", "image_url"]);
-  console.log(imageUrl);
+  //   console.log(imageUrl);
   //   return tweet.tweetWithImage(tweetText, imageUrl);
 
   return tweet.tweet(tweetText);
@@ -101,7 +101,7 @@ setInterval(() => {
       });
 
       console.log(
-        `Sales since ${cache.get("lastSaleTime", null)}: ${_.get(events, [
+        `Sales since ${cache.get("lastSaleTime", null)}: ${_.get(sortedEvents, [
           "asset",
           "name",
         ])}`
