@@ -36,10 +36,12 @@ function formatAndSendTweet(event) {
   )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
 
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
-  // if (Number(formattedEthPrice) < 1) {
-  //     console.log(`${assetName} sold below tweet price (${formattedEthPrice} ETH).`);
-  //     return;
-  // }
+  if (Number(formattedEthPrice) < 0.3) {
+    console.log(
+      `${assetName} sold below tweet price (${formattedEthPrice} ETH).`
+    );
+    return;
+  }
 
   var regex =
     /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gm;
@@ -57,10 +59,10 @@ function formatAndSendTweet(event) {
   console.log(`Posting ${assetName}!`);
 
   // OPTIONAL PREFERENCE - if you want the tweet to include an attached image instead of just text
-  const imageUrl = _.get(event, ["asset", "image_preview_url"]);
-  return tweet.tweetWithImage(tweetText, imageUrl);
+  // const imageUrl = _.get(event, ["asset", "image_preview_url"]);
+  // return tweet.tweetWithImage(tweetText, imageUrl);
 
-  // return tweet.tweet(tweetText);
+  return tweet.tweet(tweetText);
 }
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
