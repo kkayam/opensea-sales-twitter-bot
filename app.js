@@ -4,6 +4,7 @@ const moment = require("moment");
 const { ethers } = require("ethers");
 const tweet = require("./tweet");
 const cache = require("./cache");
+const emojiRegex = require("emoji-regex");
 
 // Format tweet text
 function formatAndSendTweet(event) {
@@ -34,6 +35,10 @@ function formatAndSendTweet(event) {
   } ($${Number(formattedUsdPrice).toFixed(
     2
   )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
+  var regex2 = emojiRegex();
+  if (regex2.test(assetName.slice(0, assetName.indexOf(".eth")))) {
+    console.log(`${assetName} detected by emoji-regex.`);
+  }
 
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
   if (Number(formattedEthPrice) < 0.3) {
