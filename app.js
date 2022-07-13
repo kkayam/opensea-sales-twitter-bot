@@ -41,7 +41,7 @@ function formatAndSendTweet(event) {
   }
 
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
-  if (Number(formattedEthPrice) < 0.3) {
+  if (Number(formattedEthPrice) < Number(process.env.eth_boundary)) {
     console.log(
       `${assetName} sold below tweet price (${formattedEthPrice} ETH).`
     );
