@@ -37,11 +37,11 @@ function formatAndSendTweet(event) {
   )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
 
   
-  // var regex2 = emojiRegex();
-  // regex2 = new RegExp("^"+regex2.source+"$", regex2.flags)
-  // if (regex2.test(assetName.slice(0, assetName.indexOf(".eth")))) {
-  //   console.log(`${assetName} detected by emoji-regex.`);
-  // }
+  var regex2 = emojiRegex();
+  regex2 = new RegExp("^"+regex2.source+"+$", regex2.flags)
+  if (regex2.test(assetName.slice(0, assetName.indexOf(".eth")))) {
+    console.log(`${assetName} detected by emoji-regex.`);
+  }
 
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
   if (Number(formattedEthPrice) < Number(process.env.eth_boundary)) {
