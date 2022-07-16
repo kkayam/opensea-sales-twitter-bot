@@ -35,10 +35,13 @@ function formatAndSendTweet(event) {
   } ($${Number(formattedUsdPrice).toFixed(
     2
   )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
-  var regex2 = emojiRegex();
-  if (regex2.test(assetName.slice(0, assetName.indexOf(".eth")))) {
-    console.log(`${assetName} detected by emoji-regex.`);
-  }
+
+  
+  // var regex2 = emojiRegex();
+  // regex2 = new RegExp("^"+regex2.source+"$", regex2.flags)
+  // if (regex2.test(assetName.slice(0, assetName.indexOf(".eth")))) {
+  //   console.log(`${assetName} detected by emoji-regex.`);
+  // }
 
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
   if (Number(formattedEthPrice) < Number(process.env.eth_boundary)) {
@@ -51,8 +54,6 @@ function formatAndSendTweet(event) {
   var regex =
     /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gm;
 
-  var regex2 = emojiRegex();
-  regex2 = new RegExp("^"+regex2.source+"$", regex2.flags)
 
   if (!assetName.includes(".eth")) {
     // console.log(`${assetName} not ENS domain.`);
