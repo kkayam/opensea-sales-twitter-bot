@@ -4,7 +4,7 @@ const moment = require("moment");
 const { ethers } = require("ethers");
 const tweet = require("./tweet");
 const cache = require("./cache");
-const emojiRegex = require("emoji-regex");
+const emojiRegex = require('emoji-regex');
 
 // Format tweet text
 function formatAndSendTweet(event) {
@@ -50,6 +50,9 @@ function formatAndSendTweet(event) {
 
   var regex =
     /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gm;
+
+  var regex2 = emojiRegex();
+  regex2 = new RegExp("^"+regex2.source+"$", regex2.flags)
 
   if (!assetName.includes(".eth")) {
     // console.log(`${assetName} not ENS domain.`);
