@@ -67,6 +67,8 @@ function formatAndSendTweet(event) {
   return tweet.tweet(tweetText);
 }
 
+tweet.getRecentTweets();
+
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
 setInterval(() => {
   var d = new Date(0);

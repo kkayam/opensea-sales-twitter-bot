@@ -51,6 +51,12 @@ async function tweetWithImage(tweetText, imageUrl) {
     });
 }
 
+async function getRecentTweets(){
+    twitterClient.get('search/tweets', { q: 'from:Ensemojisales since:2022-07-11', count: 100 }, function(err, data, response) {
+        console.log(data)
+      })
+}
+
 // Format a provided URL into it's base64 representation
 function getBase64(url) {
     return axios.get(url, { responseType: 'arraybuffer'}).then(response => Buffer.from(response.data, 'binary').toString('base64'))
@@ -58,5 +64,6 @@ function getBase64(url) {
 
 module.exports = {
     tweet: tweet,
-    tweetWithImage: tweetWithImage
+    tweetWithImage: tweetWithImage,
+    getRecentTweets: getRecentTweets
 };
