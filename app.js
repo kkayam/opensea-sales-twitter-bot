@@ -4,7 +4,8 @@ const moment = require("moment");
 const { ethers } = require("ethers");
 const tweet = require("./tweet");
 const cache = require("./cache");
-const emojiRegex = require('emoji-regex');
+const emojiRegex = require("emoji-regex");
+const { max } = require("lodash");
 
 // Format tweet text
 function formatAndSendTweet(event) {
@@ -36,7 +37,6 @@ function formatAndSendTweet(event) {
     2
   )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
 
-
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
   if (Number(formattedEthPrice) < Number(process.env.eth_boundary)) {
     console.log(
@@ -51,7 +51,7 @@ function formatAndSendTweet(event) {
   }
 
   var regex = emojiRegex();
-  regex = new RegExp("^"+regex.source+"+$", regex.flags)
+  regex = new RegExp("^" + regex.source + "+$", regex.flags);
 
   if (!regex.test(assetName.slice(0, assetName.indexOf(".eth")))) {
     console.log(`${assetName} not only emojis.`);
@@ -67,7 +67,48 @@ function formatAndSendTweet(event) {
   return tweet.tweet(tweetText);
 }
 
-tweet.getRecentTweets();
+async function summarizeWeek() {
+  tweet.getRecentTweets().then((data) => {
+    var sales = data[0].statuses.filter((tweet) =>
+      tweet.text.includes("bought")
+    );
+    var count = sales.length;
+
+    var usdRegex = /\$(\d+\.*\d*)/gm;
+    var ethRegex = /(\d+\.*\d*)Ξ/gm;
+    var maxSale = sales.reduce(function (prev, current) {
+      return parseFloat(prev.text.match(usdRegex)[0].replace("$", "")) >
+        parseFloat(current.text.match(usdRegex)[0].replace("$", ""))
+        ? prev
+        : current;
+    });
+    var maxUsd = parseFloat(maxSale.text.match(usdRegex)[0].replace("$", ""));
+    var maxEth = parseFloat(maxSale.text.match(ethRegex)[0].replace("Ξ", ""));
+
+    const averageUsd = (
+      sales.reduce(
+        (total, next) =>
+          total + parseFloat(next.text.match(usdRegex)[0].replace("$", "")),
+        0
+      ) / count
+    ).toFixed(2);
+    const averageEth = (
+      sales.reduce(
+        (total, next) =>
+          total + parseFloat(next.text.match(ethRegex)[0].replace("Ξ", "")),
+        0
+      ) / count
+    ).toFixed(2);
+    var weeklySummary = `Last Week in ENS Emojis (Over 0.1Ξ):\nNumber of Sales: ${count}\nHighest Sale in USD: $${maxUsd}\nHighest Sale in ETH: ${maxEth}Ξ\nAverage Price in USD: $${averageUsd}\nAverage Price in ETH: ${averageEth}Ξ\n#NFT #ENS #EMOJIENS #EMOJI`;
+    console.log(weeklySummary);
+    // return tweet.tweetWithImage(
+    //   weeklySummary,
+    //   "https://i.imgur.com/KDUZore.jpeg"
+    // );
+  });
+}
+
+// summarizeWeek();
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
 setInterval(() => {
