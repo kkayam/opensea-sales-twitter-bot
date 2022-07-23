@@ -5,7 +5,7 @@ const { ethers } = require("ethers");
 const tweet = require("./tweet");
 const cache = require("./cache");
 const emojiRegex = require("emoji-regex");
-const { max } = require("lodash");
+const { max, slice } = require("lodash");
 
 // Format tweet text
 function formatAndSendTweet(event) {
@@ -67,18 +67,16 @@ function formatAndSendTweet(event) {
   return tweet.tweet(tweetText);
 }
 
-async function summarizeWeek() {
-  tweet.getRecentTweets().then((data) => {
-    var prev_posts = data[0].statuses.filter((tweet) =>
+function summarizeWeek() {
+  tweet.getRecentTweets().then((tweets) => {
+    var prev_posts = tweets.filter((tweet) =>
       tweet.text.includes("Last Week in ENS Emojis")
     );
     if (prev_posts.length != 1) {
       return;
     }
 
-    var sales = data[0].statuses.filter((tweet) =>
-      tweet.text.includes("bought")
-    );
+    var sales = tweets.filter((tweet) => tweet.text.includes("bought"));
 
     var count = sales.length;
 
@@ -107,7 +105,25 @@ async function summarizeWeek() {
         0
       ) / count
     ).toFixed(2);
-    var weeklySummary = `Last Week in ENS Emojis (Over 0.1Ξ):\nNumber of Sales: ${count}\nHighest Sale in USD: $${maxUsd}\nHighest Sale in ETH: ${maxEth}Ξ\nAverage Price in USD: $${averageUsd}\nAverage Price in ETH: ${averageEth}Ξ\n#NFT #ENS #EMOJIENS #EMOJI`;
+    sales.sort(function (a, b) {
+      return (
+        parseFloat(b.text.match(ethRegex)[0].replace("Ξ", "")) -
+        parseFloat(a.text.match(ethRegex)[0].replace("Ξ", ""))
+      );
+    });
+    var top3 = sales.slice(0, 3).map((tweet) => {
+      return (
+        tweet.text.slice(0, tweet.text.indexOf(".eth") + 4) +
+        "\t" +
+        tweet.text.match(ethRegex)[0] +
+        "(" +
+        tweet.text.match(usdRegex)[0] +
+        ")"
+      );
+    });
+
+    var weeklySummary = `Last Week in ENS Emojis (Over 0.1Ξ):\n\nNumber of Sales:${count}\nHighest Sale: \t${maxEth}Ξ ($${maxUsd})\nAverage Price: \t${averageEth}Ξ ($${averageUsd})\n\nMajor Moves This Week:\n1.${top3[0]}\n2.${top3[1]}\n3.${top3[2]}\n#NFT #ENS #EMOJIENS #EMOJI`;
+
     // console.log(weeklySummary);
     return tweet.tweetWithImage(
       weeklySummary,

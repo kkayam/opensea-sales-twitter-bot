@@ -1,29 +1,29 @@
 const axios = require("axios");
+const { TwitterApi } = require("twitter-api-v2");
 const twit = require("twit");
 require("dotenv").config();
 
 const twitterConfig = {
+  appKey: process.env.CONSUMER_KEY,
+  appSecret: process.env.CONSUMER_SECRET,
+  accessToken: process.env.ACCESS_TOKEN_KEY,
+  accessSecret: process.env.ACCESS_TOKEN_SECRET,
+};
+
+const twitConfig = {
   consumer_key: process.env.CONSUMER_KEY,
   consumer_secret: process.env.CONSUMER_SECRET,
   access_token: process.env.ACCESS_TOKEN_KEY,
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 };
 
-const twitterClient = new twit(twitterConfig);
+const twitterClient = new TwitterApi(twitterConfig);
+const twitClient = new twit(twitConfig);
 
 // Tweet a text-based status
 async function tweet(tweetText) {
-  const tweet = {
-    status: tweetText,
-  };
-
-  twitterClient.post("statuses/update", tweet, (error, tweet, response) => {
-    if (!error) {
-      console.log(`Successfully tweeted: ${tweetText}`);
-    } else {
-      console.error(error);
-    }
-  });
+  await twitterClient.v2.tweet(tweetText);
+  console.log(`Successfully tweeted: ${tweetText}`);
 }
 
 // OPTIONAL - use this method if you want the tweet to include the full image file of the OpenSea item in the tweet.
@@ -32,7 +32,7 @@ async function tweetWithImage(tweetText, imageUrl) {
   const processedImage = await getBase64(imageUrl);
 
   // Upload the item's image from OpenSea to Twitter & retrieve a reference to it
-  twitterClient.post(
+  twitClient.post(
     "media/upload",
     { media_data: processedImage },
     (error, media, response) => {
@@ -42,17 +42,13 @@ async function tweetWithImage(tweetText, imageUrl) {
           media_ids: [media.media_id_string],
         };
 
-        twitterClient.post(
-          "statuses/update",
-          tweet,
-          (error, tweet, response) => {
-            if (!error) {
-              console.log(`Successfully tweeted: ${tweetText}`);
-            } else {
-              console.error(error);
-            }
+        twitClient.post("statuses/update", tweet, (error, tweet, response) => {
+          if (!error) {
+            console.log(`Successfully tweeted: ${tweetText}`);
+          } else {
+            console.error(error);
           }
-        );
+        });
       } else {
         console.error(error);
       }
@@ -61,7 +57,7 @@ async function tweetWithImage(tweetText, imageUrl) {
 }
 
 async function getRecentTweets() {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const now = new Date();
 
     var lastWeek = new Date(
@@ -71,14 +67,12 @@ async function getRecentTweets() {
     )
       .toJSON()
       .slice(0, 10);
-
-    twitterClient.get(
-      "search/tweets",
-      { q: `from:Ensemojisales since:${lastWeek}`, count: 100 },
-      function (err, data, response) {
-        resolve([data]);
-      }
+    const jackTimeline = await twitterClient.v2.userTimeline(
+      "1500147643737124864",
+      { start_time: lastWeek + "T00:00:00Z" }
     );
+    var response = await jackTimeline.fetchLast(1000);
+    resolve(response._realData.data);
   });
 }
 
