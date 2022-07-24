@@ -1,6 +1,5 @@
 const axios = require("axios");
 const { TwitterApi } = require("twitter-api-v2");
-const twit = require("twit");
 require("dotenv").config();
 
 const twitterConfig = {
@@ -10,15 +9,7 @@ const twitterConfig = {
   accessSecret: process.env.ACCESS_TOKEN_SECRET,
 };
 
-const twitConfig = {
-  consumer_key: process.env.CONSUMER_KEY,
-  consumer_secret: process.env.CONSUMER_SECRET,
-  access_token: process.env.ACCESS_TOKEN_KEY,
-  access_token_secret: process.env.ACCESS_TOKEN_SECRET,
-};
-
 const twitterClient = new TwitterApi(twitterConfig);
-const twitClient = new twit(twitConfig);
 
 // Tweet a text-based status
 async function tweet(tweetText) {
@@ -29,31 +20,16 @@ async function tweet(tweetText) {
 // OPTIONAL - use this method if you want the tweet to include the full image file of the OpenSea item in the tweet.
 async function tweetWithImage(tweetText, imageUrl) {
   // Format our image to base64
-  const processedImage = await getBase64(imageUrl);
-
-  // Upload the item's image from OpenSea to Twitter & retrieve a reference to it
-  twitClient.post(
-    "media/upload",
-    { media_data: processedImage },
-    (error, media, response) => {
-      if (!error) {
-        const tweet = {
-          status: tweetText,
-          media_ids: [media.media_id_string],
-        };
-
-        twitClient.post("statuses/update", tweet, (error, tweet, response) => {
-          if (!error) {
-            console.log(`Successfully tweeted: ${tweetText}`);
-          } else {
-            console.error(error);
-          }
-        });
-      } else {
-        console.error(error);
-      }
-    }
-  );
+  var image = await getBase64(imageUrl);
+  // Upload image
+  var mediaId = await twitterClient.v1.uploadMedia(image, {
+    mimeType: "EUploadMimeType." + imageUrl.split(".").pop(),
+  });
+  // Tweet with mediaId of image
+  await twitterClient.v1.tweet(tweetText, {
+    media_ids: [mediaId],
+  });
+  console.log(`Successfully tweeted: ${tweetText}`);
 }
 
 async function getRecentTweets() {
@@ -76,13 +52,11 @@ async function getRecentTweets() {
   });
 }
 
-// Format a provided URL into it's base64 representation
+// Format a provided URL into a buffer object
 function getBase64(url) {
   return axios
     .get(url, { responseType: "arraybuffer" })
-    .then((response) =>
-      Buffer.from(response.data, "binary").toString("base64")
-    );
+    .then((response) => Buffer.from(response.data));
 }
 
 module.exports = {
