@@ -114,15 +114,15 @@ function summarizeWeek() {
     var top3 = sales.slice(0, 3).map((tweet) => {
       return (
         tweet.text.slice(0, tweet.text.indexOf(".eth") + 4) +
-        "\t" +
+        " " +
         tweet.text.match(ethRegex)[0] +
-        "(" +
+        " (" +
         tweet.text.match(usdRegex)[0] +
         ")"
       );
     });
 
-    var weeklySummary = `Last Week in ENS Emojis (Over 0.1Ξ):\n\nNumber of Sales:${count}\nHighest Sale: \t${maxEth}Ξ ($${maxUsd})\nAverage Price: \t${averageEth}Ξ ($${averageUsd})\n\nMajor Moves This Week:\n1.${top3[0]}\n2.${top3[1]}\n3.${top3[2]}\n#NFT #ENS #EMOJIENS #EMOJI`;
+    var weeklySummary = `Last Week in ENS Emojis (Over 0.1Ξ):\n\nNumber of Sales: ${count}\nHighest Sale: ${maxEth}Ξ ($${maxUsd})\nAverage Price: ${averageEth}Ξ ($${averageUsd})\n\nMajor Moves This Week:\n1.${top3[0]}\n2.${top3[1]}\n3.${top3[2]}\n#NFT #ENS #EMOJIENS #EMOJI`;
 
     // console.log(weeklySummary);
     return tweet.tweetWithImage(
