@@ -134,7 +134,7 @@ function summarizeWeek() {
 
 // Check if already summarized and summarize
 setInterval(() => {
-  const now = new Date();
+  var now = new Date();
   if (now.getDay() == 1) {
     summarizeWeek();
   }
