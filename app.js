@@ -76,7 +76,6 @@ function summarizeWeek() {
     if (prev_posts.length != 1) {
       return;
     }
-    return;
 
     var sales = tweets.filter((tweet) => tweet.text.includes("bought"));
 
@@ -140,10 +139,10 @@ console.log(test.getDay());
 setInterval(() => {
   var now = new Date();
   console.log("trying to summarize week");
-  if (now.getDay() == 0) {
+  if (now.getDay() == 1) {
     summarizeWeek();
   }
-}, 20000);
+}, 3600000);
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
 setInterval(() => {
