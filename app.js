@@ -72,6 +72,7 @@ function summarizeWeek() {
     var prev_posts = tweets.filter((tweet) =>
       tweet.text.includes("Last Week in ENS Emojis")
     );
+    console.log("prev post length " + prev_posts.length);
     if (prev_posts.length != 1) {
       return;
     }
@@ -131,10 +132,13 @@ function summarizeWeek() {
     );
   });
 }
+var test = new Date();
+console.log(test.getDay());
 
 // Check if already summarized and summarize
 setInterval(() => {
   var now = new Date();
+  console.log("trying to summarize week");
   if (now.getDay() == 1) {
     summarizeWeek();
   }
