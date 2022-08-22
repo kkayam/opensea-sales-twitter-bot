@@ -66,6 +66,12 @@ function formatAndSendTweet(event) {
 
   return tweet.tweet(tweetText);
 }
+tweet.getRecentTweets().then((tweets) => {
+    var prev_posts = tweets.filter((tweet) =>
+      tweet.text.includes("Last Week in ENS Emojis")
+    );
+    console.log(prev_posts.length);
+});
 
 function summarizeWeek() {
   tweet.getRecentTweets().then((tweets) => {
