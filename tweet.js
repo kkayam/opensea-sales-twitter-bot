@@ -43,6 +43,7 @@ async function getRecentTweets() {
     )
       .toJSON()
       .slice(0, 10);
+    console.log(lastWeek);
     const jackTimeline = await twitterClient.v2.userTimeline(
       "1500147643737124864",
       { start_time: lastWeek + "T00:00:00Z" }
