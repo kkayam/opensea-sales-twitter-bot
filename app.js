@@ -35,7 +35,7 @@ function formatAndSendTweet(event) {
     ethers.constants.EtherSymbol
   } ($${Number(formattedUsdPrice).toFixed(
     2
-  )})!!! #NFT #ENS #EMOJIENS #EMOJI ${openseaLink}`;
+  )})!!! #NFT #ENS #NUMBERENS ${openseaLink}`;
 
   // OPTIONAL PREFERENCE - don't tweet out sales below X ETH (default is 1 ETH - change to what you prefer)
   if (Number(formattedEthPrice) < Number(process.env.eth_boundary)) {
@@ -50,11 +50,10 @@ function formatAndSendTweet(event) {
     return;
   }
 
-  var regex = emojiRegex();
-  regex = new RegExp("^" + regex.source + "+$", regex.flags);
+  var regex = new RegExp("^\d+$", "gm");
 
   if (!regex.test(assetName.slice(0, assetName.indexOf(".eth")))) {
-    console.log(`${assetName} not only emojis.`);
+    console.log(`${assetName} not only numbers.`);
     return;
   }
 
@@ -134,12 +133,12 @@ function summarizeWeek() {
 }
 
 // Check if already summarized and summarize
-setInterval(() => {
-  var now = new Date();
-  if (now.getDay() == 1) {
-    summarizeWeek();
-  }
-}, 3600000);
+// setInterval(() => {
+//   var now = new Date();
+//   if (now.getDay() == 1) {
+//     summarizeWeek();
+//   }
+// }, 3600000);
 
 // Poll OpenSea every 60 seconds & retrieve all sales for a given collection in either the time since the last sale OR in the last minute
 setInterval(() => {
