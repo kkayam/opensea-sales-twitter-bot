@@ -50,7 +50,7 @@ function formatAndSendTweet(event) {
     return;
   }
 
-  var regex = new RegExp("^\d+$");
+  var regex = new RegExp("^\\d+$");
 
   if (!regex.test(assetName.slice(0, assetName.indexOf(".eth")))) {
     console.log(`${assetName} not only numbers.`);
