@@ -68,7 +68,7 @@ function formatAndSendTweet(event) {
 
   return tweet.tweetWithPoster(
     tweetText,
-    assetName,
+    assetName.slice(0, assetName.indexOf(".eth") + 4),
     Number(formattedEthPrice).toFixed(2),
     Number(formattedUsdPrice).toFixed(2)
   );
