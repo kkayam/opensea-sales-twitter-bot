@@ -57,7 +57,15 @@ function draw_poster(ens, eth, usd) {
     if (i == 0) {
       y -= 50;
     }
-    if (i == 1) ctx.font = "50px Apple Emoji";
+    if (i == 1) {
+      ctx.font = "50px Apple Emoji";
+      ctx.fillText(str, x, y);
+      ctx.font = "50px ";
+      var new_str = ".eth";
+      var new_textDim = ctx.measureText(new_str);
+      var new_x = x + textDim.width - new_textDim.width;
+      ctx.fillText(new_str, new_x, y);
+    }
     if (i == 2) {
       ctx.fillStyle = "#eeb133";
       roundRect(
