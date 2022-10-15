@@ -78,7 +78,7 @@ function draw_poster(ens, eth, usd) {
         textDim.actualBoundingBoxAscent + textDim.actualBoundingBoxDescent;
 
       x = canvas.width / 2 - textDim.width / 2;
-      y = i * 80 + 135;
+      y = i * 80 + 145;
     }
     ctx.fillText(str, x, y);
     ctx.font = "50px ";
