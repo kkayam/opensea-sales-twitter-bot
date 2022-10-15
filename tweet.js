@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { TwitterApi } = require("twitter-api-v2");
+const { draw_poster } = require("./poster");
 require("dotenv").config();
 
 const twitterConfig = {
@@ -31,6 +32,19 @@ async function tweetWithImage(tweetText, imageUrl) {
   });
   console.log(`Successfully tweeted: ${tweetText}`);
 }
+async function tweetWithPoster(tweetText, ens, eth, usd) {
+  // Format our image to base64
+  var image = draw_poster(ens, eth, usd);
+  // Upload image
+  var mediaId = await twitterClient.v1.uploadMedia(image, {
+    mimeType: "EUploadMimeType.png",
+  });
+  // Tweet with mediaId of image
+  await twitterClient.v1.tweet(tweetText, {
+    media_ids: [mediaId],
+  });
+  console.log(`Successfully tweeted: ${tweetText}`);
+}
 
 async function getRecentTweets() {
   return new Promise(async (resolve, reject) => {
@@ -43,7 +57,7 @@ async function getRecentTweets() {
     )
       .toJSON()
       .slice(0, 10);
-      
+
     const jackTimeline = await twitterClient.v2.userTimeline(
       "1500147643737124864",
       { start_time: lastWeek + "T00:00:00Z" }
@@ -64,4 +78,5 @@ module.exports = {
   tweet: tweet,
   tweetWithImage: tweetWithImage,
   getRecentTweets: getRecentTweets,
+  tweetWithPoster: tweetWithPoster,
 };

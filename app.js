@@ -64,7 +64,14 @@ function formatAndSendTweet(event) {
   // const imageUrl = _.get(event, ["asset", "image_preview_url"]);
   // return tweet.tweetWithImage(tweetText, imageUrl);
 
-  return tweet.tweet(tweetText);
+  // return tweet.tweet(tweetText);
+
+  return tweet.tweetWithPoster(
+    tweetText,
+    assetName,
+    Number(formattedEthPrice).toFixed(2),
+    Number(formattedUsdPrice).toFixed(2)
+  );
 }
 
 function summarizeWeek() {
