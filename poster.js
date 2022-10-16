@@ -31,8 +31,8 @@ function logo(ctx, canvas, y) {
   ctx.fillText(logo, canvas.width / 2 - textDim.width / 2, y + 25);
 }
 
-function draw_poster(ens, eth, usd) {
-  GlobalFonts.registerFromPath("./AppleColorEmoji@2x.ttf", "Apple Emoji");
+async function draw_poster(ens, eth, usd) {
+  GlobalFonts.registerFromPath("./AppleColorEmoji@2x.ttc", "Apple Emoji");
 
   const canvas = createCanvas(600, 600);
   const ctx = canvas.getContext("2d");
@@ -60,11 +60,11 @@ function draw_poster(ens, eth, usd) {
     if (i == 1) {
       ctx.font = "50px Apple Emoji";
       ctx.fillText(str, x, y);
-      ctx.font = "50px ";
-      var new_str = ".eth";
-      var new_textDim = ctx.measureText(new_str);
-      var new_x = x + textDim.width - new_textDim.width;
-      ctx.fillText(new_str, new_x, y);
+      // ctx.font = "50px ";
+      // var new_str = ".eth";
+      // var new_textDim = ctx.measureText(new_str);
+      // var new_x = x + textDim.width - new_textDim.width;
+      // ctx.fillText(new_str, new_x, y);
     }
     if (i == 2) {
       ctx.fillStyle = "#eeb133";
