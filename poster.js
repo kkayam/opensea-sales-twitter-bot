@@ -32,7 +32,7 @@ function logo(ctx, canvas, y) {
 }
 
 async function draw_poster(ens, eth, usd) {
-  GlobalFonts.registerFromPath("./AppleColorEmoji@2x.ttc", "Apple Emoji");
+  GlobalFonts.registerFromPath("./AppleColorEmoji.ttf", "Apple Emoji");
 
   const canvas = createCanvas(600, 600);
   const ctx = canvas.getContext("2d");
